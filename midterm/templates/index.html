@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Map Tech Plus</title>
+</head>
+
+<body>
+    <H1>Find a Location</H1>
+        <button onclick="redirectToLocate()">Find here</button>
+    <h1>Routing part</h1>
+    <form action="/submit" method="post">
+        <label for="input1">Origine:</label>
+        <input type="text" id="input1" name="input1"><br><br>
+
+        <label for="input2">Destination:</label>
+        <input type="text" id="input2" name="input2"><br><br>
+
+        <label for="mode">Mode:</label>
+        <select id="mode" name="mode">
+            <option value="car">Car</option>
+            <option value="bike">Bike</option>
+            <option value="foot">Foot</option>
+        </select><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if session['map_result'] %}
+        <h2>Itinerary</h2>
+        <p><strong>Origin:</strong> {{ session['map_result']['origin'][3] }}</p>
+        <p><strong>Destination:</strong> {{ session['map_result']['destination'][3] }}</p>
+        <p><strong>Distance:</strong> {{ session['map_result']['km'] }} km / {{ session['map_result']['miles'] }} miles</p>
+        <p><strong>Time:</strong> {{ session['map_result']['hr'] }} hr {{ session['map_result']['min'] }} min {{
+            session['map_result']['sec'] }} sec</p>
+    {% endif %}
+
+
+    <script>
+        function redirectToLocate() {
+            window.location.href = "/locate";
+        }
+    </script>
+</body>
+
+</html>

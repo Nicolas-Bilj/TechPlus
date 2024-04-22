@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Place Info</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h1>Search A place</h1>
+
+<form action="/info" method="post">
+    <label for="searchInput">Looking for:</label>
+    <input type="text" id="searchInput" name="searchInput" placeholder="Enter the name of the location">
+    <ul id="results" style="display: none;"></ul>
+    <input type="submit" value="Locate">
+</form>
+
+{% if session['info_result'] %}
+        <h2>Information about the place</h2>
+        <p><strong>Name:</strong> {{ session['info_result'][3] }}</p>
+        <p><strong>Longitude:</strong> {{ session['info_result'][2] }}</p>
+        <p><strong>Latitude:</strong> {{ session['info_result'][1] }}</p>
+{% endif %}
+
+<script>
+    $(document).ready(function(){
+        $("#searchInput").on("keyup", function(){
+            let query = $(this).val();
+            
+            if (query.length >= 2) {
+                $.ajax({
+                    url: "/search",
+                    method: "GET",
+                    data: {query: query},
+                    success: function(response){
+                        let html = "";
+
+                        response.forEach(function(location){
+                            html += `<li class="result-item" data-lat="${location.lat}" data-lng="${location.lng}">${location.name}</li>`;
+                        });
+
+                        $("#results").html(html).show();
+                    }
+                });
+            }
+        });
+
+        $(document).on("click", ".result-item", function(){
+            let selectedName = $(this).text();
+            let selectedLat = $(this).data("lat");
+            let selectedLng = $(this).data("lng");
+
+            $("#searchInput").val(selectedName);
+            $("#results").hide();
+        });
+    });
+</script>
+
+</body>
+</html>
