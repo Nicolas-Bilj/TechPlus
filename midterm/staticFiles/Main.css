@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'TimesNewLightItalic';
+    src: url('./fonts/times-now-extralight-italic.woff2') format('woff2')
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.RoutingCard {
+    font-weight: 600;
+}
+
+.Form {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.Spacer {
+    margin-bottom: 40px;
+}
+
+.HomeCard {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    border-radius: 12px;
+    margin-top: 150px;
+    margin-left: 39%;
+    margin-right: 39%;
+    border-width: 1px;
+    border-style: solid;
+    height: 600px;
+    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
+}
+
+.HomeTitle {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+
+.button {
+    width: 150px;
+    height: 30px;
+    background-color: rgba(161, 118, 255, 0.8);
+    color: white;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    border-width: 0px;
+    font-size: 22px;
+    font-weight: bold;
+    transition: 0.4s;
+}
+
+.button:hover {
+    color: black;
+}
+
+H1 {
+    font-family: 'TimesNewLightItalic';
+}
+
+p {
+
+}

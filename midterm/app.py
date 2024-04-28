@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from map import trip, search_place, geocoding
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='staticFiles')
 app.secret_key = 'WBZiK?mS$SvA20D&0zMHJ5bYZu7a96'
 
 @app.route('/')

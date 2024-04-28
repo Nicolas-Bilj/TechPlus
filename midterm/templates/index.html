@@ -3,28 +3,33 @@
 
 <head>
     <title>Map Tech Plus</title>
+    <link rel="stylesheet" href='/staticFiles/Main.css' />
 </head>
 
-<body>
-    <H1>Find a Location</H1>
-        <button onclick="redirectToLocate()">Find here</button>
-    <h1>Routing part</h1>
-    <form action="/submit" method="post">
-        <label for="input1">Origine:</label>
-        <input type="text" id="input1" name="input1"><br><br>
+<body class='HomeCard'>
+    <div>
+        <H1 class="HomeTitle">Find a Location</H1>
+        <button onclick="redirectToLocate()" class='button Spacer'>Find here</button>
+    </div>
+    <div class='RoutingCard'>
+        <h1 class='HomeTitle'>Routing part</h1>
+        <form action="/submit" method="post" class='Form'>
+            <label for="input1">Origine:</label>
+            <input type="text" id="input1" name="input1"><br><br>
 
-        <label for="input2">Destination:</label>
-        <input type="text" id="input2" name="input2"><br><br>
+            <label for="input2">Destination:</label>
+            <input type="text" id="input2" name="input2"><br><br>
 
-        <label for="mode">Mode:</label>
-        <select id="mode" name="mode">
-            <option value="car">Car</option>
-            <option value="bike">Bike</option>
-            <option value="foot">Foot</option>
-        </select><br><br>
+            <label for="mode">Mode:</label>
+            <select id="mode" name="mode" class='Spacer button'>
+                <option value="car">Car</option>
+                <option value="bike">Bike</option>
+                <option value="foot">Foot</option>
+            </select><br><br>
 
-        <input type="submit" value="Submit">
-    </form>
+            <input type="submit" value="Submit" class='button'>
+        </form>
+    </div>
 
     {% if session['map_result'] %}
         <h2>Itinerary</h2>
