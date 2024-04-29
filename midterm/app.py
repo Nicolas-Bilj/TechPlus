@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from map import trip, search_place, geocoding
+import json
 
 app = Flask(__name__, template_folder='templates', static_folder='staticFiles')
 app.secret_key = 'WBZiK?mS$SvA20D&0zMHJ5bYZu7a96'
@@ -28,7 +29,7 @@ def info():
     if value1 != '':
         result = geocoding(value1, None)
         session['info_result'] = result
-    return redirect(url_for('locate'))
+    return render_template(url_for('locate'))
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -39,9 +40,7 @@ def submit():
 
     if value1 != '' and value2 != '' and mode != None:
         result = trip(value1, value2, mode)
-        print(result)
-        session['map_result'] = result
-    return redirect(url_for('index'))
+    return render_template('index.html', result=result)
 
 if __name__ == '__main__':
     app.run(debug=True)

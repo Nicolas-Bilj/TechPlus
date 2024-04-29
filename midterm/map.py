@@ -3,7 +3,7 @@ import urllib.parse
 
 KEY = "473cdd1a-6274-4cf4-8485-2ca79a23d1c9"
 
-def geocoding (location, key):
+def geocoding(location, key):
     if key is None:
         key = KEY
     while location == "":
@@ -13,6 +13,7 @@ def geocoding (location, key):
     "key":key})
     replydata = requests.get(url)
     json_data = replydata.json()
+    open("geocode.json", "w").write(replydata.text)
     json_status = replydata.status_code
     if json_status == 200 and len(json_data["hits"]) !=0:
         lat = json_data["hits"][0]["point"]["lat"]
@@ -97,7 +98,8 @@ def routing_function(orig, dest, vehicle):
         'km' : (paths_data["paths"][0]["distance"])/1000,
         'sec' : int(paths_data["paths"][0]["time"]/1000%60),
         'min' : int(paths_data["paths"][0]["time"]/1000/60%60),
-        'hr' : int(paths_data["paths"][0]["time"]/1000/60/60)
+        'hr' : int(paths_data["paths"][0]["time"]/1000/60/60),
+        'instructions' : paths_data["paths"][0]["instructions"],
     }
     return data
 

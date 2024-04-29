@@ -44,15 +44,22 @@
         </br>
         </br>
         <div class="text-center">
-            {% if session['map_result'] %}
+            {% if result %}
             <h2>Itinerary</h2>
-            <p><strong>Origin:</strong> {{ session['map_result']['origin'][3] }}</p>
-            <p><strong>Destination:</strong> {{ session['map_result']['destination'][3] }}</p>
-            <p><strong>Distance:</strong> {{ session['map_result']['km'] }} km / {{ session['map_result']['miles'] }} miles</p>
-            <p><strong>Time:</strong> {{ session['map_result']['hr'] }} hr {{ session['map_result']['min'] }} min {{
-                session['map_result']['sec'] }} sec</p>
+            <p><strong>Origin:</strong> {{ result['origin'][3] }}</p>
+            <p><strong>Destination:</strong> {{ result['destination'][3] }}</p>
+            <p><strong>Distance:</strong> {{ result['km'] }} km / {{ result['miles'] }} miles</p>
+            <p><strong>Time:</strong> {{ result['hr'] }} hr {{ result['min'] }} min {{
+                result['sec'] }} sec</p>
             {% endif %}
+            <p>{{ result['instructions'] }}</p>
         </div>
+        #get map
+        <div id="map" style="height: 500px;"></div>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+
     </div>
 
     <script>
