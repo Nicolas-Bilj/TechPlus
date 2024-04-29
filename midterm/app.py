@@ -39,8 +39,8 @@ def submit():
     result = None
 
     if value1 != '' and value2 != '' and mode != None:
-        result = trip(value1, value2, mode)
-    return render_template('index.html', result=result)
+        result, streetMap = trip(value1, value2, mode)
+    return render_template('index.html', result=result, streetMap=streetMap)
 
 if __name__ == '__main__':
     app.run(debug=True)

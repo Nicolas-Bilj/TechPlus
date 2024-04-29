@@ -49,15 +49,28 @@
             <p><strong>Origin:</strong> {{ result['origin'][3] }}</p>
             <p><strong>Destination:</strong> {{ result['destination'][3] }}</p>
             <p><strong>Distance:</strong> {{ result['km'] }} km / {{ result['miles'] }} miles</p>
-            <p><strong>Time:</strong> {{ result['hr'] }} hr {{ result['min'] }} min {{
-                result['sec'] }} sec</p>
+            <p><strong>Time:</strong> {{ result['hr'] }} hr {{ result['min'] }} min {{ result['sec'] }} sec</p>
+            
+            {% if streetMap %}
+            <a href="{{ streetMap }}" target="_blank" class="btn btn-primary" style="margin: 20px;">View on OpenStreetMap</a>
             {% endif %}
-            <p>{{ result['instructions'] }}</p>
+
+            {% if result['instructions'] %}
+            {% endif %}
+
+            <h3>Instructions</h3>
+            {% set count = 1 %}
+            <ul class="list-group list-group-flush">
+                {% for instruction in result['instructions'] %}
+                <li class="list-group-item bg-dark text-white text-left">
+                    <strong>Step {{ count }}:</strong> {{ instruction['text'] }}
+                </li>
+                {% set count = count + 1 %}
+                {% endfor %}
+            </ul>
+
+            {% endif %}
         </div>
-        #get map
-        <div id="map" style="height: 500px;"></div>
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
 
     </div>
@@ -65,6 +78,19 @@
     <script>
         function redirectToLocate() {
             window.location.href = "/locate";
+        }
+
+        function openStreetMap(instructions) {
+            if (!instructions) {
+                console.error("No instructions provided.");
+                return;
+            }
+            var baseURL = 'https://www.openstreetmap.org/directions?';
+            var url = baseURL + 'route=' + encodeURIComponent(instructions);
+
+            console.log("Map URL:", url);
+
+            window.open(url, '_blank');
         }
     </script>
 </body>

@@ -99,9 +99,11 @@ def routing_function(orig, dest, vehicle):
         'sec' : int(paths_data["paths"][0]["time"]/1000%60),
         'min' : int(paths_data["paths"][0]["time"]/1000/60%60),
         'hr' : int(paths_data["paths"][0]["time"]/1000/60/60),
-        'instructions' : paths_data["paths"][0]["instructions"],
+        'instructions' : paths_data["paths"][0]["instructions"]
     }
-    return data
+    #get openStreetMap url using the instructions as one road
+    url = f"https://www.openstreetmap.org/directions?engine={vehicle}&route={orig[1]}%2C{orig[2]}%3B{dest[1]}%2C{dest[2]}"
+    return data, url
 
 def trip(origin, destination, vehicle):
     orig = geocoding(origin, KEY)
