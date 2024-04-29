@@ -60,13 +60,11 @@
             {% endif %}
 
             <h3>Instructions</h3>
-            {% set count = 1 %}
             <ul class="list-group list-group-flush">
                 {% for instruction in result['instructions'] %}
                 <li class="list-group-item bg-dark text-white text-left">
-                    <strong>Step {{ count }}:</strong> {{ instruction['text'] }}
+                    <strong>{{ instruction['distance'] }} m</strong> {{ instruction['text'] }}
                 </li>
-                {% set count = count + 1 %}
                 {% endfor %}
             </ul>
 

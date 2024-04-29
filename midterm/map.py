@@ -101,6 +101,8 @@ def routing_function(orig, dest, vehicle):
         'hr' : int(paths_data["paths"][0]["time"]/1000/60/60),
         'instructions' : paths_data["paths"][0]["instructions"]
     }
+    for instruction in data['instructions']:
+        instruction['distance'] = int(round(instruction['distance'], 0))
     #get openStreetMap url using the instructions as one road
     if vehicle == "bike":
         vehicle = "bicycle"
