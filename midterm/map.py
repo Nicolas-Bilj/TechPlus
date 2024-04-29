@@ -102,8 +102,9 @@ def routing_function(orig, dest, vehicle):
         'instructions' : paths_data["paths"][0]["instructions"]
     }
     #get openStreetMap url using the instructions as one road
-    vehicle = "bicycle" if vehicle == "bike" else vehicle
-    url = f"https://www.openstreetmap.org/directions?engine=graphhopper_g{vehicle}&route={orig[1]}%2C{orig[2]}%3B{dest[1]}%2C{dest[2]}"
+    if vehicle == "bike":
+        vehicle = "bicycle"
+    url = f"https://www.openstreetmap.org/directions?engine=graphhopper_{vehicle}&route={orig[1]}%2C{orig[2]}%3B{dest[1]}%2C{dest[2]}"
     return data, url
 
 def trip(origin, destination, vehicle):
