@@ -6,6 +6,22 @@ import json
 app = Flask(__name__, template_folder='templates', static_folder='staticFiles')
 app.secret_key = 'WBZiK?mS$SvA20D&0zMHJ5bYZu7a96'
 app.config['SEARCH_HISTORY'] = []
+api_key = "041c36486fc0b2772fd95e1912d43ef3"
+# https://api.openweathermap.org/data/2.5/weather?lat=48.856613&lon=2.352222&appid=041c36486fc0b2772fd95e1912d43ef3
+
+def get_weather(lat, lon, api_key):
+    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
+    response = requests.get(url)
+    data = response.json()
+    
+    if 'weather' in data and 'main' in data:
+        description = data['weather'][0]['description']
+        temperature_kelvin = data['main']['temp']
+        temperature_celsius = temperature_kelvin - 273.15  # Convert temperature from Kelvin to Celsius
+        return description, temperature_celsius
+    else:
+        return None, None
+
 
 @app.route('/')
 def index():
@@ -42,14 +58,30 @@ def submit():
     value2 = request.form['input2']
     mode = request.form['mode']
     result = None
-
     if value1 != '' and value2 != '' and mode != None:
         result, streetMap = trip(value1, value2, mode)
         
-        # Ajouter la recherche à l'historique
+        # Add the search to the history
         app.config['SEARCH_HISTORY'].append({'origin': value1, 'destination': value2, 'mode': mode})
         session['search_history'] = app.config['SEARCH_HISTORY']
-    return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []))
+        
+        # Fetch weather data for the origin coordinates
+        if 'origin' in result:
+            origin_lat, origin_lon = result['origin'][1], result['origin'][2]  # Extract latitude and longitude
+            origin_weather, origin_temperature = get_weather(origin_lat, origin_lon, api_key)
+        else:
+            origin_weather, origin_temperature = None, None
+        
+        # Fetch weather data for the destination coordinates
+        if 'destination' in result:
+            destination_lat, destination_lon = result['destination'][1], result['destination'][2]  # Extract latitude and longitude
+            destination_weather, destination_temperature = get_weather(destination_lat, destination_lon, api_key)
+        else:
+            destination_weather, destination_temperature = None, None
+        
+    return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []),
+                           origin_weather=origin_weather, origin_temperature=origin_temperature,
+                           destination_weather=destination_weather, destination_temperature=destination_temperature)
 
 def get_public_ip():
     try:
@@ -93,5 +125,17 @@ def myLocation():
         print(f"Error in myLocation function: {e}")
         return jsonify({'error': 'An error occurred'})
 
+
+
+    # KEY = "71a05ff63404ea7a184277bee7228e2f"
+
+    #     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={KEY}"
+  
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+

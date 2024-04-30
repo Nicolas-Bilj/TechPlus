@@ -59,8 +59,21 @@
         </div>
 
         <div class="text-center">
+            {% if origin_weather %}
+            <h4 class='Spacer-top-bottom'>Weather at Origin</h4>
+            <p><strong>Description:</strong> {{ origin_weather }}</p>
+            <p><strong>Temperature:</strong> {{ origin_temperature | round }}°C</p>
+            {% endif %}
+            {% if destination_weather %}
+            <h4 class='Spacer-top-bottom'>Weather at Destination</h4>
+            <p><strong>Description:</strong> {{ destination_weather }}</p>
+            <p><strong>Temperature:</strong> {{ destination_temperature | round }}°C</p>
+            {% endif %}
+        </div>
+
+        <div class="text-center">
             {% if result %}
-            <h2>Itinerary</h2>
+            <h2 class="Spacer-top">Itinerary</h2>
             <p><strong>Origin:</strong> {{ result['origin'][3] }}</p>
             <p><strong>Destination:</strong> {{ result['destination'][3] }}</p>
             <p><strong>Distance:</strong> {{ result['km'] }} km / {{ result['miles'] }} miles</p>
