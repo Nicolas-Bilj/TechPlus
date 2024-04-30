@@ -63,11 +63,17 @@
             <h4 class='Spacer-top-bottom'>Weather at Origin</h4>
             <p><strong>Description:</strong> {{ origin_weather }}</p>
             <p><strong>Temperature:</strong> {{ origin_temperature | round }}°C</p>
+            <p><strong>Humidity:</strong> {{ origin_humidity }}%</p>
+            <p><strong>Wind Speed:</strong> {{ origin_wind_speed }} m/s</p>
+            <p><strong>Feels Like:</strong> {{ origin_feels_like | round}}°C</p>
             {% endif %}
             {% if destination_weather %}
             <h4 class='Spacer-top-bottom'>Weather at Destination</h4>
             <p><strong>Description:</strong> {{ destination_weather }}</p>
             <p><strong>Temperature:</strong> {{ destination_temperature | round }}°C</p>
+            <p><strong>Humidity:</strong> {{ destination_humidity }}%</p>
+            <p><strong>Wind Speed:</strong> {{ destination_wind_speed }} m/s</p>
+            <p><strong>Feels Like:</strong> {{ destination_feels_like | round}}°C</p>
             {% endif %}
         </div>
 

@@ -13,14 +13,22 @@ def get_weather(lat, lon, api_key):
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
     response = requests.get(url)
     data = response.json()
+    print("res:", requests.get(url))
+    print("qsd:", data)
     
     if 'weather' in data and 'main' in data:
         description = data['weather'][0]['description']
         temperature_kelvin = data['main']['temp']
         temperature_celsius = temperature_kelvin - 273.15  # Convert temperature from Kelvin to Celsius
-        return description, temperature_celsius
+        feels_like_kelvin = data['main']['feels_like']
+        feels_like_celsius = feels_like_kelvin - 273.15  # Convert feels like temperature from Kelvin to Celsius
+        humidity = data['main']['humidity']
+        wind_speed = data['wind']['speed']
+        # Add other weather information as needed
+        
+        return description, temperature_celsius, feels_like_celsius, humidity, wind_speed
     else:
-        return None, None
+        return None, None, None, None, None
 
 
 @app.route('/')
@@ -68,20 +76,22 @@ def submit():
         # Fetch weather data for the origin coordinates
         if 'origin' in result:
             origin_lat, origin_lon = result['origin'][1], result['origin'][2]  # Extract latitude and longitude
-            origin_weather, origin_temperature = get_weather(origin_lat, origin_lon, api_key)
+            origin_weather, origin_temperature, origin_feels_like, origin_humidity, origin_wind_speed = get_weather(origin_lat, origin_lon, api_key)
         else:
-            origin_weather, origin_temperature = None, None
+            origin_weather, origin_temperature, origin_feels_like, origin_humidity, origin_wind_speed = None, None, None, None, None
         
         # Fetch weather data for the destination coordinates
         if 'destination' in result:
             destination_lat, destination_lon = result['destination'][1], result['destination'][2]  # Extract latitude and longitude
-            destination_weather, destination_temperature = get_weather(destination_lat, destination_lon, api_key)
+            destination_weather, destination_temperature, destination_feels_like, destination_humidity, destination_wind_speed = get_weather(destination_lat, destination_lon, api_key)
         else:
-            destination_weather, destination_temperature = None, None
+            destination_weather, destination_temperature, destination_feels_like, destination_humidity, destination_wind_speed = None, None, None, None, None
         
     return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []),
                            origin_weather=origin_weather, origin_temperature=origin_temperature,
-                           destination_weather=destination_weather, destination_temperature=destination_temperature)
+                           origin_feels_like=origin_feels_like, origin_humidity=origin_humidity, origin_wind_speed=origin_wind_speed,
+                           destination_weather=destination_weather, destination_temperature=destination_temperature,
+                           destination_feels_like=destination_feels_like, destination_humidity=destination_humidity, destination_wind_speed=destination_wind_speed)
 
 def get_public_ip():
     try:
