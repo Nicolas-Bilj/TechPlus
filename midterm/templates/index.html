@@ -44,6 +44,22 @@
         </form>
         </br>
         </br>
+
+        
+        <div class="text-center">
+            <h3>Search history</h3>
+            {% if history %}
+                <ul class="list-group list-group-flush">
+                    {% for item in history %}
+                        <li class="list-group-item bg-dark text-white">
+                            <strong>Origin:</strong> {{ item['origin'] }} - <strong>Destination:</strong> {{ item['destination'] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+
         <div class="text-center">
             {% if result %}
             <h2>Itinerary</h2>

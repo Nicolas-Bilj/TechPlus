@@ -4,10 +4,14 @@ import json
 
 app = Flask(__name__, template_folder='templates', static_folder='staticFiles')
 app.secret_key = 'WBZiK?mS$SvA20D&0zMHJ5bYZu7a96'
+app.config['SEARCH_HISTORY'] = []
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # return render_template('index.html')
+    search_history = session.get('search_history', app.config['SEARCH_HISTORY'])
+    return render_template('index.html', history=search_history)
+
 
 @app.route('/locate')
 def locate():
@@ -40,7 +44,11 @@ def submit():
 
     if value1 != '' and value2 != '' and mode != None:
         result, streetMap = trip(value1, value2, mode)
-    return render_template('index.html', result=result, streetMap=streetMap)
+        
+        # Ajouter la recherche à l'historique
+        app.config['SEARCH_HISTORY'].append({'origin': value1, 'destination': value2, 'mode': mode})
+        session['search_history'] = app.config['SEARCH_HISTORY']
+    return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []))
 
 if __name__ == '__main__':
     app.run(debug=True)
