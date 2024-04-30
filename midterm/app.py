@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from map import trip, search_place, geocoding
+import requests
 import json
 
 app = Flask(__name__, template_folder='templates', static_folder='staticFiles')
@@ -49,6 +50,36 @@ def submit():
         app.config['SEARCH_HISTORY'].append({'origin': value1, 'destination': value2, 'mode': mode})
         session['search_history'] = app.config['SEARCH_HISTORY']
     return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []))
+
+@app.route('/myLocation', methods=['GET'])
+def myLocation():
+    try:
+        user_ip = request.remote_addr
+        url = f"https://graphhopper.com/api/1/geocode?q={user_ip}&key={app.secret_key}"
+        response = requests.get(url)
+        print("ici on a les coo");
+        print(data);
+        data = response.json()
+
+        if 'hits' in data and data['hits']:
+            first_hit = data['hits'][0]
+            latitude = first_hit['point']['lat']
+            longitude = first_hit['point']['lng']
+
+            url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={app.secret_key}"
+            response = requests.get(url)
+            print(data);
+            data = response.json()
+
+            if 'results' in data and data['results']:
+                for result in data['results']:
+                    for component in result['address_components']:
+                        if 'locality' in component['types']:
+                            return jsonify({'location': component['long_name']})
+    except Exception as e:
+        print(f"Error in myLocation function: {e}")
+
+    return jsonify({'error': 'Location not found'})
 
 if __name__ == '__main__':
     app.run(debug=True)
