@@ -97,7 +97,8 @@
                 const input1 = document.getElementById('input1');
                 console.log(data);
                 if (data.location) {
-                    input1.placeholder = `Your location: ${data.location}`;
+                    input1.placeholder = `${data.location}`;
+                    input1.value = `${data.location}`;
                 } else {
                     input1.placeholder = "Enter your location";
                 }

@@ -51,35 +51,47 @@ def submit():
         session['search_history'] = app.config['SEARCH_HISTORY']
     return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []))
 
+def get_public_ip():
+    try:
+        # Make a request to the ipinfo.io API to get your public IP address
+        response = requests.get('https://ipinfo.io/json')
+        
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Parse the JSON response
+            data = response.json()
+            # Extract and return the public IP address
+            return data['ip']
+        else:
+            print(f"Failed to retrieve public IP. Status code: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
 @app.route('/myLocation', methods=['GET'])
 def myLocation():
+    KEY = "cfda6437ed9a8d"
     try:
-        user_ip = request.remote_addr
-        url = f"https://graphhopper.com/api/1/geocode?q={user_ip}&key={app.secret_key}"
+        user_ip = get_public_ip()
+        print(user_ip)
+        
+        url = f"https://ipinfo.io/{user_ip}?token={KEY}"
+        print(url)
         response = requests.get(url)
-        print("ici on a les coo");
-        print(data);
+        print(response);
         data = response.json()
-
-        if 'hits' in data and data['hits']:
-            first_hit = data['hits'][0]
-            latitude = first_hit['point']['lat']
-            longitude = first_hit['point']['lng']
-
-            url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={app.secret_key}"
-            response = requests.get(url)
-            print(data);
-            data = response.json()
-
-            if 'results' in data and data['results']:
-                for result in data['results']:
-                    for component in result['address_components']:
-                        if 'locality' in component['types']:
-                            return jsonify({'location': component['long_name']})
+        print(data)
+        if 'city' in data:
+            city = data['city'];
+            print(city);
+            return jsonify({'location': city})
+        else:
+            return jsonify({'error': 'City not found'})
     except Exception as e:
         print(f"Error in myLocation function: {e}")
-
-    return jsonify({'error': 'Location not found'})
+        return jsonify({'error': 'An error occurred'})
 
 if __name__ == '__main__':
     app.run(debug=True)
