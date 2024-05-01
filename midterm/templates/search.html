@@ -1,63 +1,70 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Place Info</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href='/staticFiles/Main.css' />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
+
 <body class='HomeCard'>
-
-<div class='RoutingCard'>
-    <h1 class='HomeTitle'>Search A place</h1>
-
-    <form action="/info" method="post" class='Form'>
-        <label for="searchInput">Looking for:</label>
-        <input type="text" id="searchInput" name="searchInput" placeholder="Enter the name of the location" class='Spacer-bottom'>
+    <form action="/info" method="post" class="container bg-dark"
+        style="position: relative; margin-top: 0px; margin-bottom: 0px;">
+        <h1 class="text-center">Search A place</h1>
+        <div class="form-group">
+            <label for="searchInput">Looking for:</label>
+            <input type="text" id="searchInput" name="searchInput" placeholder="Enter the name of the location"
+                class="form-control">
+        </div>
         <ul id="results" style="display: none;"></ul>
-        <input type="submit" value="Locate" class='button'>
+        <input type="submit" value="Locate" class="btn btn-primary">
     </form>
-</div>
 
-{% if session['info_result'] %}
+    <div class="container bg-dark">
+        {% if session['info_result'] %}
         <h2>Information about the place</h2>
         <p><strong>Name:</strong> {{ session['info_result'][3] }}</p>
         <p><strong>Longitude:</strong> {{ session['info_result'][2] }}</p>
         <p><strong>Latitude:</strong> {{ session['info_result'][1] }}</p>
-{% endif %}
+        {% endif %}
+    </div>
 
-<script>
-    $(document).ready(function(){
-        $("#searchInput").on("keyup", function(){
-            let query = $(this).val();
-            
-            if (query.length >= 2) {
-                $.ajax({
-                    url: "/search",
-                    method: "GET",
-                    data: {query: query},
-                    success: function(response){
-                        let html = "";
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                let query = $(this).val();
 
-                        response.forEach(function(location){
-                            html += `<li class="result-item" data-lat="${location.lat}" data-lng="${location.lng}">${location.name}</li>`;
-                        });
+                if (query.length >= 2) {
+                    $.ajax({
+                        url: "/search",
+                        method: "GET",
+                        data: { query: query },
+                        success: function (response) {
+                            let html = "";
 
-                        $("#results").html(html).show();
-                    }
-                });
-            }
+                            response.forEach(function (location) {
+                                html += `<li class="result-item" data-lat="${location.lat}" data-lng="${location.lng}">${location.name}</li>`;
+                            });
+
+                            $("#results").html(html).show();
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", ".result-item", function () {
+                let selectedName = $(this).text();
+                let selectedLat = $(this).data("lat");
+                let selectedLng = $(this).data("lng");
+
+                $("#searchInput").val(selectedName);
+                $("#results").hide();
+            });
         });
-
-        $(document).on("click", ".result-item", function(){
-            let selectedName = $(this).text();
-            let selectedLat = $(this).data("lat");
-            let selectedLng = $(this).data("lng");
-
-            $("#searchInput").val(selectedName);
-            $("#results").hide();
-        });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

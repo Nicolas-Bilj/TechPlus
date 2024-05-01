@@ -36,9 +36,8 @@ body {
     margin-top: 150px;
     margin-left: 39%;
     margin-right: 39%;
-    border-width: 1px;
-    border-style: solid;
-    height: 600px;
+    height: auto;
+    color: white;
     box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -68,6 +67,6 @@ H1 {
     font-family: 'TimesNewLightItalic';
 }
 
-p {
-
+.result-item:hover {
+    cursor: pointer;
 }
