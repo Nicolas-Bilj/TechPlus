@@ -59,7 +59,7 @@ def info():
     if value1 != '':
         result = geocoding(value1, None)
         session['info_result'] = result
-    return render_template(url_for('locate'))
+    return render_template('search.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
