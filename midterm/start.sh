@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install Flask
-pip install Flask
+pip install -r requirements.txt
 
 # Checking Flask installation
 flask --version
