@@ -11,6 +11,21 @@ api_key = "041c36486fc0b2772fd95e1912d43ef3"
 # https://api.openweathermap.org/data/2.5/weather?lat=48.856613&lon=2.352222&appid=041c36486fc0b2772fd95e1912d43ef3
 
 def get_weather(lat, lon, api_key):
+    """
+    Get the live weather of a place using the OpenWeatherMap API.
+
+    Parameters:
+        lat (float): The latitude of the place.
+        lon (float): The longitude of the place.
+        api_key (str): The API key for OpenWeatherMap.
+
+    Returns:
+        str: The description of the weather.
+        float: The temperature in Celsius.
+        float: The feels-like temperature in Celsius.
+        int: The humidity percentage.
+        float: The wind speed in m/s.
+    """
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
     response = requests.get(url)
     data = response.json()
@@ -20,9 +35,9 @@ def get_weather(lat, lon, api_key):
     if 'weather' in data and 'main' in data:
         description = data['weather'][0]['description']
         temperature_kelvin = data['main']['temp']
-        temperature_celsius = temperature_kelvin - 273.15  # Convert temperature from Kelvin to Celsius
+        temperature_celsius = temperature_kelvin - 273.15
         feels_like_kelvin = data['main']['feels_like']
-        feels_like_celsius = feels_like_kelvin - 273.15  # Convert feels like temperature from Kelvin to Celsius
+        feels_like_celsius = feels_like_kelvin - 273.15
         humidity = data['main']['humidity']
         wind_speed = data['wind']['speed']
         # Add other weather information as needed
@@ -34,17 +49,25 @@ def get_weather(lat, lon, api_key):
 
 @app.route('/')
 def index():
-    # return render_template('index.html')
+    """
+    Render the index page of the application.
+    """
     search_history = session.get('search_history', app.config['SEARCH_HISTORY'])
     return render_template('index.html', history=search_history)
 
 
 @app.route('/locate')
 def locate():
+    """
+    Render the locate page of the application.
+    """
     return render_template('search.html')
 
 @app.route('/search', methods=['GET'])
 def search():
+    """
+    Search for a place using the GraphHopper API.
+    """
     query = request.args.get('query')
 
     if not query:
@@ -53,6 +76,9 @@ def search():
 
 @app.route('/info', methods=['POST'])
 def info():
+    """
+    Get the information of a place using the GraphHopper API.
+    """
     value1 = request.form['searchInput']
     result = None
 
@@ -63,6 +89,9 @@ def info():
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    """
+    Submit the form data to get the route and weather information.
+    """
     value1 = request.form['input1']
     value2 = request.form['input2']
     mode = request.form['mode']
@@ -98,6 +127,9 @@ def submit():
                            destination_feels_like=destination_feels_like, destination_humidity=destination_humidity, destination_wind_speed=destination_wind_speed, origin_aq=origin_aq, destination_aq=destination_aq)
 
 def get_public_ip():
+    """
+    Get your public IP address using the ipinfo.io API.
+    """
     try:
         # Make a request to the ipinfo.io API to get your public IP address
         response = requests.get('https://ipinfo.io/json')   
@@ -118,6 +150,9 @@ def get_public_ip():
 
 @app.route('/myLocation', methods=['GET'])
 def myLocation():
+    """
+    Get the location of the user using their public IP address.
+    """
     KEY = "cfda6437ed9a8d"
     try:
         user_ip = get_public_ip()
