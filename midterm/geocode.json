@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"hits":[{"point":{"lat":44.841225,"lng":-0.5800364},"extent":[-0.6386987,44.8107826,-0.5336838,44.9161806],"name":"Bordeaux","country":"France","countrycode":"FR","state":"Nouvelle-Aquitaine","postcode":"33000;33100;33200;33300;33800","osm_id":105270,"osm_type":"R","osm_key":"place","osm_value":"city"}],"locale":"default"}
+=======
+{"hits":[{"point":{"lat":-5.01508,"lng":17.55825},"name":"Moscou","country":"République démocratique du Congo","countrycode":"CD","state":"Kwilu","osm_id":1161084612,"osm_type":"N","osm_key":"place","osm_value":"village"}],"locale":"default"}
+>>>>>>> 24886f52c9024dd814a7227299ef91fb7f02f228

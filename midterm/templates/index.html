@@ -20,7 +20,7 @@
 </head>
 
 <body class="text-white bg-secondary">
-    <div class="container bg-dark", style="position: relative; margin-top: 0px; margin-bottom: 0px;">
+    <div class="container bg-dark" style="position: relative; margin-top: 0px; margin-bottom: 0px;">
     <div class="container bg-dark">
         <h1 class="text-center">Find a location</h1>
         <form action="/submit" method="post" class='Form'>
@@ -44,9 +44,44 @@
         </form>
         </br>
         </br>
+
+        <div class="text-center">
+            <h3>Search history</h3>
+            {% if history %}
+                <ul class="list-group list-group-flush">
+                    {% for item in history %}
+                        <li class="list-group-item bg-dark text-white">
+                            <strong>Origin:</strong> {{ item['origin'] }} - <strong>Destination:</strong> {{ item['destination'] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="text-center">
+            {% if origin_weather %}
+            <h4 class='Spacer-top-bottom'>Weather at Origin</h4>
+            <p><strong>Description:</strong> {{ origin_weather }}</p>
+            <p><strong>Temperature:</strong> {{ origin_temperature | round }}°C</p>
+            <p><strong>Humidity:</strong> {{ origin_humidity }}%</p>
+            <p><strong>Wind Speed:</strong> {{ origin_wind_speed }} m/s</p>
+            <p><strong>Feels Like:</strong> {{ origin_feels_like | round}}°C</p>
+            <p><strong>Air Quality Index:</strong> {{ origin_aq}}</p>
+            {% endif %}
+            {% if destination_weather %}
+            <h4 class='Spacer-top-bottom'>Weather at Destination</h4>
+            <p><strong>Description:</strong> {{ destination_weather }}</p>
+            <p><strong>Temperature:</strong> {{ destination_temperature | round }}°C</p>
+            <p><strong>Humidity:</strong> {{ destination_humidity }}%</p>
+            <p><strong>Wind Speed:</strong> {{ destination_wind_speed }} m/s</p>
+            <p><strong>Feels Like:</strong> {{ destination_feels_like | round}}°C</p>
+            <p><strong>Air Quality Index:</strong> {{ destination_aq}}</p>
+            {% endif %}
+        </div>
+
         <div class="text-center">
             {% if result %}
-            <h2>Itinerary</h2>
+            <h2 class="Spacer-top">Itinerary</h2>
             <p><strong>Origin:</strong> {{ result['origin'][3] }}</p>
             <p><strong>Destination:</strong> {{ result['destination'][3] }}</p>
             <p><strong>Distance:</strong> {{ result['km'] }} km / {{ result['miles'] }} miles</p>
@@ -71,10 +106,29 @@
             {% endif %}
         </div>
 
-
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch the user's location when the page loads
+            fetch('/myLocation')
+            .then(response => response.json())
+            .then(data => {
+                // Set the user's location as the placeholder value for the input field
+                const input1 = document.getElementById('input1');
+                console.log(data);
+                if (data.location) {
+                    input1.placeholder = `${data.location}`;
+                    input1.value = `${data.location}`;
+                } else {
+                    input1.placeholder = "Enter your location";
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching location:', error);
+            });
+        });
+
         function redirectToLocate() {
             window.location.href = "/locate";
         }
