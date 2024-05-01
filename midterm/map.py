@@ -26,7 +26,6 @@ def geocoding(location, key):
     "key":key})
     replydata = requests.get(url)
     json_data = replydata.json()
-    open("geocode.json", "w").write(replydata.text)
     json_status = replydata.status_code
     if json_status == 200 and len(json_data["hits"]) !=0:
         lat = json_data["hits"][0]["point"]["lat"]
