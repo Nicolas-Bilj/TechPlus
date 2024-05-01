@@ -125,6 +125,7 @@ def submit():
                            origin_feels_like=origin_feels_like, origin_humidity=origin_humidity, origin_wind_speed=origin_wind_speed,
                            destination_weather=destination_weather, destination_temperature=destination_temperature,
                            destination_feels_like=destination_feels_like, destination_humidity=destination_humidity, destination_wind_speed=destination_wind_speed, origin_aq=origin_aq, destination_aq=destination_aq)
+    return render_template('index.html', history=session.get('search_history', []))
 
 def get_public_ip():
     """
