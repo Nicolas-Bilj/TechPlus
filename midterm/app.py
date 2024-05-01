@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from map import trip, search_place, geocoding
+from airquality import get_air_quality
 import requests
 import json
 
@@ -77,27 +78,30 @@ def submit():
         if 'origin' in result:
             origin_lat, origin_lon = result['origin'][1], result['origin'][2]  # Extract latitude and longitude
             origin_weather, origin_temperature, origin_feels_like, origin_humidity, origin_wind_speed = get_weather(origin_lat, origin_lon, api_key)
+            origin_aq = get_air_quality(origin_lat, origin_lon, api_key)
         else:
             origin_weather, origin_temperature, origin_feels_like, origin_humidity, origin_wind_speed = None, None, None, None, None
-        
+            origin_aq = None
+
         # Fetch weather data for the destination coordinates
         if 'destination' in result:
             destination_lat, destination_lon = result['destination'][1], result['destination'][2]  # Extract latitude and longitude
             destination_weather, destination_temperature, destination_feels_like, destination_humidity, destination_wind_speed = get_weather(destination_lat, destination_lon, api_key)
+            destination_aq = get_air_quality(destination_lat, destination_lon, api_key)
         else:
             destination_weather, destination_temperature, destination_feels_like, destination_humidity, destination_wind_speed = None, None, None, None, None
-        
-    return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []),
+            destination_aq = None
+        return render_template('index.html', result=result, streetMap=streetMap, history=session.get('search_history', []),
                            origin_weather=origin_weather, origin_temperature=origin_temperature,
                            origin_feels_like=origin_feels_like, origin_humidity=origin_humidity, origin_wind_speed=origin_wind_speed,
                            destination_weather=destination_weather, destination_temperature=destination_temperature,
-                           destination_feels_like=destination_feels_like, destination_humidity=destination_humidity, destination_wind_speed=destination_wind_speed)
+                           destination_feels_like=destination_feels_like, destination_humidity=destination_humidity, destination_wind_speed=destination_wind_speed, origin_aq=origin_aq, destination_aq=destination_aq)
 
 def get_public_ip():
     try:
         # Make a request to the ipinfo.io API to get your public IP address
-        response = requests.get('https://ipinfo.io/json')
-        
+        response = requests.get('https://ipinfo.io/json')   
+
         # Check if the request was successful
         if response.status_code == 200:
             # Parse the JSON response

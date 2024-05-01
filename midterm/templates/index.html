@@ -66,6 +66,7 @@
             <p><strong>Humidity:</strong> {{ origin_humidity }}%</p>
             <p><strong>Wind Speed:</strong> {{ origin_wind_speed }} m/s</p>
             <p><strong>Feels Like:</strong> {{ origin_feels_like | round}}°C</p>
+            <p><strong>Air Quality Index:</strong> {{ origin_aq}}</p>
             {% endif %}
             {% if destination_weather %}
             <h4 class='Spacer-top-bottom'>Weather at Destination</h4>
@@ -74,6 +75,7 @@
             <p><strong>Humidity:</strong> {{ destination_humidity }}%</p>
             <p><strong>Wind Speed:</strong> {{ destination_wind_speed }} m/s</p>
             <p><strong>Feels Like:</strong> {{ destination_feels_like | round}}°C</p>
+            <p><strong>Air Quality Index:</strong> {{ destination_aq}}</p>
             {% endif %}
         </div>
 
