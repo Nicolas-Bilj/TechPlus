@@ -4,6 +4,19 @@ import urllib.parse
 KEY = "473cdd1a-6274-4cf4-8485-2ca79a23d1c9"
 
 def geocoding(location, key):
+    """
+    Get the latitude and longitude of a location using the GraphHopper Geocoding API.
+
+    Parameters:
+        location (str): The location to geocode.
+        key (str): The API key for GraphHopper.
+
+    Returns:
+        int: The status code of the API request.
+        float: The latitude of the location.
+        float: The longitude of the location.
+        str: The name of the location.
+    """
     if key is None:
         key = KEY
     while location == "":
@@ -45,24 +58,18 @@ def geocoding(location, key):
             print("Geocode API status: " + str(json_status) + "\nError message: " + json_data["message"])
     return json_status,lat,lng, new_loc
 
-##def ask_vehicle(): Not need anymore
-##    print("\n+++++++++++++++++++++++++++++++++++++++++++++")
-##    print("Vehicle profiles available on Graphhopper:")
-##    print("+++++++++++++++++++++++++++++++++++++++++++++")
-##    print("car, bike, foot")
-##    print("+++++++++++++++++++++++++++++++++++++++++++++")
-##    profile=["car", "bike", "foot"]
-##    vehicle = input("Enter a vehicle profile from the list above: ")
-##    if vehicle == "quit" or vehicle == "q":
-##        return None
-##    elif vehicle in profile:
-##        vehicle = vehicle
-##    else:
-##        vehicle = "car"
-##        print("No valid vehicle profile was entered. Using the car profile.")
-##    return vehicle
-
 def routing_function(orig, dest, vehicle):
+    """
+    Get the route between two locations using the GraphHopper Routing API.
+
+    Parameters:
+        orig (tuple): The origin location as a tuple of latitude and longitude.
+        dest (tuple): The destination location as a tuple of latitude and longitude.
+        vehicle (str): The vehicle type for routing.
+
+    Returns:
+        dict: The route data.
+    """
     route_url = "https://graphhopper.com/api/1/route?"
     op="&point="+str(orig[1])+"%2C"+str(orig[2])
     dp="&point="+str(dest[1])+"%2C"+str(dest[2])
@@ -70,22 +77,6 @@ def routing_function(orig, dest, vehicle):
     paths_status = requests.get(paths_url).status_code
     paths_data = requests.get(paths_url).json()
     print("Routing API Status: " + str(paths_status) + "\nRouting API URL:\n" + paths_url)
-    ##print("=================================================")
-    ##print("Directions from " + orig[3] + " to " + dest[3] + " by " + vehicle)
-    ##print("=================================================")
-    ##if paths_status == 200:
-    ##    print("Distance Traveled: " + str(paths_data["paths"][0]["distance"]) + "m")
-    ##    print("Distance Traveled: {0:.1f} miles / {1:.1f} km".format(miles, km))
-    ##    print("Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr, min, sec))
-    ##    print("=================================================")
-    ##    for each in range(len(paths_data["paths"][0]["instructions"])):
-    ##        path = paths_data["paths"][0]["instructions"][each]["text"]
-    ##        distance = paths_data["paths"][0]["instructions"][each]["distance"]
-    ##        print("{0} ( {1:.1f} km / {2:.1f} miles )".format(path, distance/1000, distance/1000/1.61))
-    ##        print("=============================================")
-    ##else:
-    ##    print("Error message: " + paths_data["message"])
-    ##    print("*************************************************")
     if paths_status != 200:
         print("Error message: " + paths_data["message"])
         print("*************************************************")
@@ -110,6 +101,17 @@ def routing_function(orig, dest, vehicle):
     return data, url
 
 def trip(origin, destination, vehicle):
+    """
+    Get the route between two locations using the GraphHopper Geocoding and Routing APIs.
+
+    Parameters:
+        origin (str): The origin location.
+        destination (str): The destination location.
+        vehicle (str): The vehicle type for routing.
+
+    Returns:
+        dict: The route data.
+    """
     orig = geocoding(origin, KEY)
     print(orig)
     dest = geocoding(destination, KEY)
@@ -119,6 +121,15 @@ def trip(origin, destination, vehicle):
     
 
 def search_place(place):
+    """
+    Search for a place using the GraphHopper Geocoding API.
+
+    Parameters:
+        place (str): The place to search for.
+
+    Returns:
+        list: A list of locations matching the search query.
+    """
     params = {
         "q": place,
         "key": KEY
